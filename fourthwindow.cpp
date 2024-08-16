@@ -8,28 +8,24 @@
 #include "fourthwindow.h"
 #include "ui_fourthwindow.h"
 
-Fourthwindow::Fourthwindow(QSqlDatabase &db, QString &parsedTableName, QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::Fourthwindow),
-  db(db),
-  tableName(parsedTableName)
+Fourthwindow::Fourthwindow(QString &parsedTableName, QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Fourthwindow),
+    tableName(parsedTableName)
 {
-  ui->setupUi(this);
-  showTableView();
+    ui->setupUi(this);
+    showTableView();
 }
 
 Fourthwindow::~Fourthwindow()
 {
-  delete ui;
+    delete ui;
 }
 
 void Fourthwindow::showTableView()
 {
-  if (!db.isOpen()) {
-      db.open();
-  }
 
-  tableModel = new QSqlTableModel(this, db);
+  tableModel = new QSqlTableModel(this, DbConnection::getInstance()->getDatabase());
   tableModel->setTable(tableName);
   tableModel->select();
 

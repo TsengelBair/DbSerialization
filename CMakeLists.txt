@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
         fourthwindow.cpp
         fourthwindow.h
         fourthwindow.ui
+        dbconnection.h
+        dbconnection.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

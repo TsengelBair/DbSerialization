@@ -3,10 +3,9 @@
 #include "secondwindow.h"
 #include "ui_secondwindow.h"
 
-Secondwindow::Secondwindow(QSqlDatabase &db, QWidget *parent) :
+Secondwindow::Secondwindow(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::Secondwindow),
-  db(db),
   thirdWindow(nullptr)
 {
   ui->setupUi(this);
@@ -27,12 +26,7 @@ void Secondwindow::showDbs()
       delete widget;
   }
 
-
-  if (!db.isOpen()) {
-      db.open();
-  }
-
-  QSqlQuery query(db);
+  QSqlQuery query(DbConnection::getInstance()->getDatabase());
   query.prepare("SELECT datname FROM pg_database WHERE datistemplate = false;");
 
   if (!query.exec()) {
@@ -57,20 +51,15 @@ void Secondwindow::showDbs()
 void Secondwindow::onDbBtnClicked()
 {
   QPushButton* pushedBtn = qobject_cast<QPushButton*>(sender());
+
   if (pushedBtn) {
       QString parsedDbName = pushedBtn->text();
+      DbConnection::getInstance()->setDatabaseConfig(parsedDbName);
 
-      // Приходится дублировать настройки подключения, хотя по логике нужно только setDatabaseName
-      // Позже пофиксить
-      db = QSqlDatabase::addDatabase("QPSQL");
-      db.setUserName("postgres");
-      db.setHostName("localhost");
-      db.setPassword("25944");
-      db.setDatabaseName(parsedDbName);
       if (!thirdWindow) {
-          qDebug() << db.databaseName();
-          thirdWindow = new Thirdwindow(db);
+        thirdWindow = new Thirdwindow();
       };
+
       thirdWindow->show();
   };
 }

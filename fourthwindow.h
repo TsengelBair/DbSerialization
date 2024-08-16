@@ -5,6 +5,8 @@
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 
+#include "dbconnection.h"
+
 namespace Ui {
   class Fourthwindow;
 }
@@ -14,7 +16,7 @@ class Fourthwindow : public QWidget
     Q_OBJECT
 
   public:
-    explicit Fourthwindow(QSqlDatabase &db, QString &parsedTableName, QWidget *parent = nullptr);
+    explicit Fourthwindow(QString &parsedTableName, QWidget *parent = nullptr);
     ~Fourthwindow();
 
   private slots:
@@ -22,7 +24,6 @@ class Fourthwindow : public QWidget
 
   private:
     Ui::Fourthwindow *ui;
-    QSqlDatabase db;
     QString tableName;
     QSqlTableModel* tableModel;
 

@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 
+#include "dbconnection.h"
 #include "secondwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -24,7 +25,6 @@ class MainWindow : public QMainWindow
 
   private:
     Ui::MainWindow *ui;
-    QSqlDatabase db;
     Secondwindow* secondWindow;
 };
 #endif // MAINWINDOW_H

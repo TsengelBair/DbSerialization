@@ -3,10 +3,9 @@
 #include "thirdwindow.h"
 #include "ui_thirdwindow.h"
 
-Thirdwindow::Thirdwindow(QSqlDatabase &db ,QWidget *parent) :
+Thirdwindow::Thirdwindow(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::Thirdwindow),
-  db(db),
   fourthWindow(nullptr)
 {
   ui->setupUi(this);
@@ -20,11 +19,7 @@ Thirdwindow::~Thirdwindow()
 
 void Thirdwindow::showTables()
 {
-  if (!db.isOpen()) {
-      db.open();
-  }
-
-  QSqlQuery query(db);
+  QSqlQuery query(DbConnection::getInstance()->getDatabase());
   if (!query.exec("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'")) {
       qDebug() << "Ошибка:" << query.lastError().text();
       return;
@@ -49,10 +44,11 @@ void Thirdwindow::onTableBtnClicked()
   QPushButton* pushedBtn = qobject_cast<QPushButton*>(sender());
   if (pushedBtn) {
       QString parsedTableName = pushedBtn->text();
-      // Вызвать класс четвертого окна и доп параметром передать pasredTableName
+
       if (!fourthWindow) {
-          fourthWindow = new Fourthwindow(db, parsedTableName);
+          fourthWindow = new Fourthwindow(parsedTableName);
       };
+
       fourthWindow->show();
   };
 }

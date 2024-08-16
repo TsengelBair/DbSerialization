@@ -7,6 +7,7 @@
 #include <QSqlError>
 #include <QPushButton>
 
+#include "dbconnection.h"
 #include "thirdwindow.h"
 
 namespace Ui {
@@ -18,7 +19,7 @@ class Secondwindow : public QWidget
     Q_OBJECT
 
   public:
-    explicit Secondwindow(QSqlDatabase &db, QWidget *parent = nullptr);
+    explicit Secondwindow(QWidget *parent = nullptr);
     ~Secondwindow();
 
   private slots:
@@ -26,7 +27,6 @@ class Secondwindow : public QWidget
 
   private:
     Ui::Secondwindow *ui;
-    QSqlDatabase db;
     QVector<QString>dbsNames;
     Thirdwindow* thirdWindow;
 

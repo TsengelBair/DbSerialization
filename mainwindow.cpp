@@ -10,17 +10,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
 
-  db = QSqlDatabase::addDatabase("QPSQL");
-  db.setUserName("postgres");
-  db.setHostName("localhost");
-  db.setPassword("25944");
-
-  if (!db.open()) {
-      qDebug() << "Ошибка подключения к базе данных:" << db.lastError().text();
-      ui->statusbar->showMessage("Ошибка");
+  DbConnection* dbConnection = DbConnection::getInstance();
+  if (!dbConnection->getDatabase().isOpen()) {
+    ui->statusbar->showMessage("Ошибка при подключении к бд");
   } else {
-      qDebug() << "Успешное подключение к базе данных";
-      ui->statusbar->showMessage("Подключение установлено");
+    ui->statusbar->showMessage("Успешное подключение");
   }
 }
 
@@ -33,8 +27,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_openEditorBtn_clicked()
 {
   if (!secondWindow) {
-      secondWindow = new Secondwindow(db);
+      secondWindow = new Secondwindow();
   }
+
   secondWindow->show();
 }
 
